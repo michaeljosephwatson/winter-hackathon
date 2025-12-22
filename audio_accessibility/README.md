@@ -1,0 +1,1 @@
+This folder contains the code for camera accessibility of our text game
