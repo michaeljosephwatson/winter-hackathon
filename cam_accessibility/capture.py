@@ -4,6 +4,7 @@ from mediapipe.tasks import python
 from mediapipe.tasks.python import vision
 from mediapipe.tasks.python.vision.face_landmarker import FaceLandmarker
 import collections
+import time
 
 
 def capture_frame(cap: cv2.VideoCapture) -> mp.Image:
@@ -70,10 +71,10 @@ def smooth_direction(directions: list[int], window_size: int = 20) -> int:
 class HeadDetector:
     """Class to detect head direction from webcam feed."""
 
-    model_path = 'face_landmarker.task'
+    MODEL_PATH = 'face_landmarker.task'
 
     def __init__(self, window_size: int = 20):
-        base_options = python.BaseOptions(model_asset_path=self.model_path)
+        base_options = python.BaseOptions(model_asset_path=self.MODEL_PATH)
         options = vision.FaceLandmarkerOptions(
             base_options=base_options,
             running_mode=vision.RunningMode.IMAGE,
@@ -111,8 +112,14 @@ class HeadDetector:
 
 
 def main():
-    """Standalone testing mode with visualization."""
+    """Main method."""
+
     detector = HeadDetector()
+
+    current_direction = 0
+    timer_start = None
+    HOLD_DURATION = 3.0
+    selected_direction = None
 
     try:
         while True:
@@ -125,17 +132,40 @@ def main():
             detector.directions.append(direction)
 
             smoothed_direction = smooth_direction(detector.directions)
-
             direction_text = ["CENTER", "LEFT", "RIGHT"][smoothed_direction]
-            cv2.putText(frame, f"Direction: {direction_text}", (10, 30),
-                        cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
 
-            print(f"Direction: {smoothed_direction} ({direction_text})")
+            if smoothed_direction != 0 and smoothed_direction != current_direction:
+                current_direction = smoothed_direction
+                timer_start = time.time()
+                print(f"\nDirection: {direction_text} - Timer started!")
+
+            elif smoothed_direction == 0 and current_direction != 0:
+                print(f"Returned to CENTER - Timer reset!")
+                current_direction = 0
+                timer_start = None
+
+            if timer_start is not None and smoothed_direction != 0:
+                elapsed = time.time() - timer_start
+                remaining = HOLD_DURATION - elapsed
+
+                if elapsed >= HOLD_DURATION:
+                    selected_direction = direction_text
+                    print(f"\n✓ SELECTED: {selected_direction}!")
+                    print(f"You chose to go {selected_direction}!\n")
+
+                    timer_start = None
+                    current_direction = 0
+                    print("Pick another side or press 'q' to quit")
+
+                else:
+                    cv2.putText(frame, f"Hold for: {remaining:.1f}s", (10, 70),
+                                cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 165, 255), 2)
+
+            color = (0, 255, 0) if smoothed_direction == 0 else (0, 165, 255)
+            cv2.putText(frame, f"Direction: {direction_text}", (10, 30),
+                        cv2.FONT_HERSHEY_SIMPLEX, 1, color, 2)
 
             cv2.imshow('Head Direction', frame)
-
-            if cv2.waitKey(1) & 0xFF == ord('q'):
-                break
 
     finally:
         detector.close()
