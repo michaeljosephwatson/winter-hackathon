@@ -21,7 +21,7 @@
     <!-- Navigation: The bar at the top of the page -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <div class="container-fluid">
-        <a class="navbar-brand" href="#">HackathonStarter</a>
+        <a class="navbar-brand" href="#">Empathy Game</a>
         <button
           class="navbar-toggler"
           type="button"
@@ -47,56 +47,87 @@
     </nav>
 
     <!-- Hero Section: A large, prominent section at the top of the page -->
-    <section class="hero bg-primary text-white text-center py-5">
+    <section id="homePage" class="hero bg-primary text-white text-center py-5">
       <div class="container">
-        <h1 class="display-4 fw-bold">Welcome to Your Site</h1>
-        <p class="lead">Build something amazing</p>
+        <h1 class="display-4 fw-bold">A short tail of empathy</h1>
+        <p class="lead">Enter your name to continue</p>
+        <input type="text" id="userName" name="fname">
         <!-- id="cta-button" allows us to find this button in script.js -->
         <button class="btn btn-light btn-lg" id="cta-button">
-          Get Started
+          Confirm
         </button>
       </div>
     </section>
 
     <!-- Main Content: The primary information on your page -->
-    <main class="py-5">
-      <div class="container">
-        <!-- row and col-md-4 are Bootstrap classes for creating a grid layout -->
-        <div class="row g-4">
-          <!-- Each col-md-4 takes up 4 out of 12 columns (1/3 of the width) -->
-          <div class="col-md-4">
-            <div class="card">
-              <div class="card-body">
-                <h5 class="card-title">Feature One</h5>
-                <p class="card-text">
-                  Description of your first feature goes here.
-                </p>
-              </div>
+    <div class="hide" id="mainPage">
+      <main class="py-5">
+        <div class="container text-center mb-4">
+          <h2 id="gameStateTitle">
+            What will you do?
+          </h2>
+            <p id="gameStateText">
+              You see someone in trouble. How do you respond?
+            </p>
+        </div>
+
+        <div class="container">
+          <!-- row and col-md-4 are Bootstrap classes for creating a grid layout -->
+          <div class="row g-4">
+            <!-- Each col-md-4 takes up 4 out of 12 columns (1/3 of the width) -->
+            <div id="buttons" class="col-md-4">
+              <button id="buttonOne"
+                      class="card" 
+                      onclick="optionOne()"
+                      type="button"
+                      data-bs-toggle="collapse"
+                      data-bs-target="#navbarNav"
+              >
+                <div class="card-body">
+                  <h5 class="card-title">Be kind</h5>
+                  <p class="card-text">
+                    Do something kind...
+                  </p>
+                </div>
+              </button>
             </div>
-          </div>
-          <div class="col-md-4">
-            <div class="card">
-              <div class="card-body">
-                <h5 class="card-title">Feature Two</h5>
-                <p class="card-text">
-                  Description of your second feature goes here.
-                </p>
-              </div>
+            <div class="col-md-4">
+              <button id="buttonTwo"
+                      class="card" 
+                      onlclick="optionTwo()"
+                      type="button"
+                      data-bs-toggle="collapse"
+                      data-bs-target="#navbarNav"
+              >
+                <div class="card-body">
+                  <h5 class="card-title">Be Neutral</h5>
+                  <p class="card-text">
+                    Do something neutral...
+                  </p>
+                </div>
+              </button>
             </div>
-          </div>
-          <div class="col-md-4">
-            <div class="card">
-              <div class="card-body">
-                <h5 class="card-title">Feature Three</h5>
-                <p class="card-text">
-                  Description of your third feature goes here.
-                </p>
-              </div>
+            <d class="col-md-4">
+              <button id="buttonThree"
+                      class="card"
+                      onclick="optionThree()"
+                      type="button"
+                      data-bs-toggle="collapse"
+                      data-bs-target="#navbarNav"
+              >
+                <div class="card-body">
+                  <h5 class="card-title">Be mean</h5>
+                  <p class="card-text">
+                    Do something mean...
+                  </p>
+                </div>
+              </button>
             </div>
           </div>
         </div>
-      </div>
-    </main>
+      </main>
+    </div>
+   
 
     <!-- Footer: Information at the bottom of the page -->
     <footer class="bg-dark text-white text-center py-4 mt-5">
