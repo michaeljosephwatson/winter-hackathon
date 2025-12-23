@@ -30,24 +30,42 @@ document.addEventListener("DOMContentLoaded", function () {
   }
   const gameStateTitle = document.getElementById("gameStateTitle");
   const gameStateText = document.getElementById("gameStateText");
-  const buttons = document.getElementById("buttons")
+  const buttonDiv = document.getElementById("buttonDiv");
+  
+  const buttonOne = document.getElementById("buttonOne");
+  const buttonTwo = document.getElementById("buttonTwo");
+  const buttonThree = document.getElementById("buttonThree");
+  
 
-  function optionOne() {
-    buttons.classList.add("hide")
-    gameStateTitle.textContent = "You chose kindness";
-    gameStateText.textContent =
-    "Your kindness changes the situation for the better.";
+
+  buttonOne.addEventListener("click", function () {
+    buttonDiv.classList.add("hide");
+  });
+
+
+
+  if (buttonOne) {
+    buttonOne.addEventListener("click", function () {
+      buttonDiv.classList.add("hide");
+      gameStateTitle.textContent = "You chose kindness";
+      gameStateText.textContent =
+      "Your kindness changes the situation for the better.";
+    });
   }
-  function optionTwo() {
-    buttons.classList.add("hide")
-    gameStateTitle.textContent = "You chose to be Neutral";
-    gameStateText.textContent =
-    "Your Neutralness doesn't change the situation.";
+  if (buttonTwo) {
+    buttonTwo.addEventListener("click", function () {
+      buttonDiv.classList.add("hide");
+      gameStateTitle.textContent = "You chose to be Neutral";
+      gameStateText.textContent =
+      "Your Neutralness doesn't change the situation.";
+    });
   }
-  function optionThree() {
-    buttons.classList.add("hide")
-    gameStateTitle.textContent = "You chose to be mean";
-    gameStateText.textContent =
-    "Your changed the situation for the worse.";
+  if (buttonThree) {
+    buttonThree.addEventListener("click", function () {
+      buttonDiv.classList.add("hide");
+      gameStateTitle.textContent = "You chose to be mean";
+      gameStateText.textContent =
+      "Your choice changed the situation for the worse.";
+    });
   }
 });
