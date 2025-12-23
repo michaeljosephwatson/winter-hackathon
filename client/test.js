@@ -6,6 +6,32 @@ document.addEventListener("DOMContentLoaded", function () {
   let ws = null;
   let recognition = null;
 
+  const srStatus = document.getElementById("sr-status");
+
+  function announce(msg) {
+    if (!srStatus) return;
+    srStatus.textContent = "";
+    requestAnimationFrame(() => (srStatus.textContent = msg));
+  }
+
+  function setSceneA11yState(el, isHidden) {
+    if (!el) return;
+    el.hidden = isHidden;
+    el.setAttribute("aria-hidden", String(isHidden));
+
+    // Prevent keyboard focus from escaping into hidden content
+    if (isHidden) el.setAttribute("inert", "");
+    else el.removeAttribute("inert");
+  }
+
+  function focusFirstControl(sceneEl) {
+    if (!sceneEl) return;
+    const target = sceneEl.querySelector(
+      'button:not([disabled]), a[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+    );
+    (target || sceneEl).focus({ preventScroll: true });
+  }
+
   function typeWriter(element, speed = 40) {
     const fullText = element.textContent;
     element.textContent = "";
@@ -31,11 +57,12 @@ document.addEventListener("DOMContentLoaded", function () {
       "second-scene-ending",
       "third-scene",
       "third-scene-ending",
-      "fourth-scene"
+      "fourth-scene",
     ];
 
     scenes.forEach((id) => {
-      document.getElementById(id).hidden = id !== sceneId;
+      const el = document.getElementById(id);
+      setSceneA11yState(el, id !== sceneId);
     });
 
     document.getElementById("restart-button").hidden =
@@ -51,6 +78,40 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const storyBits = activeScene.querySelectorAll(".gameStateText");
     storyBits.forEach((el) => typeWriter(el));
+
+    // Focus management + announcement
+    const sceneTitle = (() => {
+      switch (sceneId) {
+        case "home-page":
+          return "Home.";
+        case "accessibility-page":
+          return "Accessibility options.";
+        case "first-scene":
+          return "Scene 1.";
+        case "second-scene":
+          return "Scene 2.";
+        case "third-scene":
+          return "Scene 3.";
+        case "fourth-scene":
+          return "Final scene.";
+        default:
+          return "Scene changed.";
+      }
+    })();
+
+    announce(sceneTitle);
+    focusFirstControl(activeScene);
+
+    // If an ending is shown, prefer focusing restart explicitly
+    if (
+      sceneId === "first-scene-ending" ||
+      sceneId === "second-scene-ending" ||
+      sceneId === "third-scene-ending" ||
+      sceneId === "fourth-scene"
+    ) {
+      const restart = document.getElementById("restart-button");
+      if (restart && !restart.hidden) restart.focus({ preventScroll: true });
+    }
   }
 
   function handleMotionSelection(selection) {
@@ -106,6 +167,75 @@ document.addEventListener("DOMContentLoaded", function () {
       setTimeout(() => (motionProcessing = false), 2000);
     }, 500);
   }
+
+  // Moving focus in button sets (arrow keys + home/end)
+  const groups = document.querySelectorAll('[role="group"]');
+  groups.forEach((group) => {
+    const buttons = Array.from(group.querySelectorAll("button"));
+    if (!buttons.length) return;
+
+    buttons.forEach((btn, i) => (btn.tabIndex = i === 0 ? 0 : -1));
+
+    function setActive(idx) {
+      const clamped = Math.max(0, Math.min(idx, buttons.length - 1));
+      buttons.forEach((b, i) => (b.tabIndex = i === clamped ? 0 : -1));
+      buttons[clamped].focus({ preventScroll: true });
+    }
+
+    group.addEventListener("keydown", (e) => {
+      const currentIndex = buttons.findIndex((b) => b === document.activeElement);
+      if (currentIndex < 0) return;
+
+      switch (e.key) {
+        case "ArrowDown":
+        case "ArrowRight":
+          e.preventDefault();
+          setActive(currentIndex + 1);
+          break;
+        case "ArrowUp":
+        case "ArrowLeft":
+          e.preventDefault();
+          setActive(currentIndex - 1);
+          break;
+        case "Home":
+          e.preventDefault();
+          setActive(0);
+          break;
+        case "End":
+          e.preventDefault();
+          setActive(buttons.length - 1);
+          break;
+      }
+    });
+
+    group.addEventListener("focusin", () => {
+      const active = buttons.findIndex((b) => b.tabIndex === 0);
+      if (active >= 0 && document.activeElement === group) setActive(active);
+    });
+  });
+
+  // Escape returns to home and cleans up modes
+  document.addEventListener("keydown", (e) => {
+    if (e.key !== "Escape") return;
+
+    const homeEl = document.getElementById("home-page");
+    if (!homeEl || homeEl.hidden === false) return;
+
+    e.preventDefault();
+
+    if (ws && ws.readyState === WebSocket.OPEN) {
+      ws.close();
+      ws = null;
+    }
+
+    if (recognition) {
+      recognition.stop();
+      recognition = null;
+      console.log("Speech recognition stopped");
+    }
+
+    goToScene("home-page");
+  });
 
   document.getElementById("start-button")?.addEventListener("click", () => {
     console.log("Journey began");
@@ -220,3 +350,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
   goToScene("home-page");
 });
+
+
+
