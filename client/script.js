@@ -71,7 +71,7 @@ document.addEventListener("DOMContentLoaded", function () {
       console.log("User selected option 2");
       document.getElementById("first-scene").hidden = true;
       document.getElementById("first-scene-ending").hidden = false;
-      document.getElementById('restart-button').hidden = false;
+      document.getElementById("restart-button").hidden = false;
     });
   }
 
@@ -90,7 +90,7 @@ document.addEventListener("DOMContentLoaded", function () {
       console.log("User selected option 2");
       document.getElementById("second-scene").hidden = true;
       document.getElementById("second-scene-ending").hidden = false;
-      document.getElementById('restart-button').hidden = false;
+      document.getElementById("restart-button").hidden = false;
     });
   }
 
@@ -100,7 +100,7 @@ document.addEventListener("DOMContentLoaded", function () {
       console.log("User selected option 1");
       document.getElementById("third-scene").hidden = true;
       document.getElementById("fourth-scene").hidden = false;
-      document.getElementById('restart-button').hidden = false;
+      document.getElementById("restart-button").hidden = false;
     });
   }
 
@@ -110,7 +110,7 @@ document.addEventListener("DOMContentLoaded", function () {
       console.log("User selected option 2");
       document.getElementById("third-scene").hidden = true;
       document.getElementById("third-scene-ending").hidden = false;
-      document.getElementById('restart-button').hidden = false;
+      document.getElementById("restart-button").hidden = false;
     });
   }
 

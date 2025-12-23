@@ -1,56 +1,46 @@
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
   <title>Understory</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css" />
 </head>
 
-<body>
+<body class="bg-success text-white">
 
-  <!-- Navigation: The bar at the top of the page -->
+  <!-- Navigation  -->
   <nav class="navbar navbar-expand-lg bg-success-subtle border-bottom border-success border-opacity-25">
-  <div class="container-fluid">
-    <a class="navbar-brand fw-semibold text-success-emphasis" href="#">
-      Understory
-    </a>
-
-    <button class="navbar-toggler border-0" type="button"
-            data-bs-toggle="collapse" data-bs-target="#navbarNav"
-            aria-controls="navbarNav" aria-expanded="false"
-            aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav ms-auto gap-2">
-        <li class="nav-item">
-          <a class="nav-link active text-success-emphasis" aria-current="page" href="#">
-            Home
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link text-success-emphasis" href="https://github.com/michaeljosephwatson/winter-hackathon">
-            Contribute
-          </a>
-        </li>
-      </ul>
+    <div class="container-fluid">
+      <a class="navbar-brand fw-semibold text-success-emphasis" href="#">
+        Understory
+      </a>
+      <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto gap-2">
+          <li class="nav-item">
+            <a class="nav-link active text-success-emphasis" aria-current="page" href="#">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-success-emphasis"
+              href="https://github.com/michaeljosephwatson/winter-hackathon">Contribute</a>
+          </li>
+        </ul>
+      </div>
     </div>
-  </div>
-</nav>
+  </nav>
 
-
-  <!-- Opening page -->
-  <div id=home-page>
+  <!-- Home page -->
+  <div id="home-page">
     <section class="hero bg-success text-white text-center py-5">
       <div class="container">
         <h1 class="display-4 fw-bold">Venture Through the Forest</h1>
-        <p class="lead">Grow your empathy along the way ... </p>
-
-        <button class="btn btn-light btn-lg" id="start-button">
+        <p class="lead mb-4">Grow your empathy along the way ... </p>
+        <button class="btn btn-light btn-lg px-5 text-success fw-semibold" id="start-button">
           Begin Journey
         </button>
       </div>
@@ -63,9 +53,7 @@
             <div class="card">
               <div class="card-body">
                 <h5 class="card-title">A Gentle Game</h5>
-                <p class="card-text">
-                  Designed to be felt, not beaten.
-                </p>
+                <p class="card-text">Designed to be felt, not beaten.</p>
               </div>
             </div>
           </div>
@@ -73,9 +61,7 @@
             <div class="card">
               <div class="card-body">
                 <h5 class="card-title">Play Without Pressure</h5>
-                <p class="card-text">
-                  No timers or scores, play at your own pace.
-                </p>
+                <p class="card-text">No timers or scores, play at your own pace.</p>
               </div>
             </div>
           </div>
@@ -83,9 +69,7 @@
             <div class="card">
               <div class="card-body">
                 <h5 class="card-title">Rooted in Nature</h5>
-                <p class="card-text">
-                  Inspired by real forests how they are sustained.
-                </p>
+                <p class="card-text">Inspired by real forests and how they are sustained.</p>
               </div>
             </div>
           </div>
@@ -96,187 +80,161 @@
 
   <!-- Accessibility page -->
   <section id="accessibility-page" class="hero bg-success text-white text-center py-5">
-
     <div class="container">
-      <h1 class="display-4 fw-bold">Accessibility Options:</h1>
-      <div class="list-group rounded" id="inputMode">
-        <button class="list-group-item list-group-item-success list-group-item-action" id="set-keyboard-accessible">
+      <h1 class="display-4 fw-bold mb-4">Accessibility Options:</h1>
+      <div class="d-flex flex-column align-items-center gap-3 my-4">
+        <button class="btn btn-light btn-lg px-5 text-success fw-semibold" id="set-keyboard-accessible">
           None (Keyboard Accessible)
         </button>
-        <button class="list-group-item list-group-item-success list-group-item-action" id="set-motion-accessible">
-          Motion Activated
+        <button class="btn btn-light btn-lg px-5 text-success fw-semibold" id="set-motion-accessible">
+          Motion
         </button>
-        <button class="list-group-item list-group-item-success list-group-item-action" id="set-audio-accessible">
-          Audio Activated
-        </button>
-      </div>
-
-    </div>
-
-  </section>
-
-  <!-- First scene/choice -->
-  <section id="first-scene" class="hero bg-success text-white text-center py-5">
-
-    <p>You sprout.
-
-      Sprouted from the ground you are a sapling.
-
-      A sapling you are not meant to be.
-
-      You know, you are meant to grow.
-    </p>
-
-    <p>Sapling, you spy a new sprout, and another, and another, and soon a whole field of fresh sprouts you spy.
-
-      You deliberate how tall you could grow with other sprouts clambering for sunlight
-    </p>
-    <div class="container">
-      <h5 class="fw-bold">Sapling, do you:
-      </h5>
-      <div class="list-group rounded" id="inputMode">
-        <button class="list-group-item list-group-item-success list-group-item-action" id="accept-new-sprouts">
-          Accept the new sprouts.
-        </button>
-        <button class="list-group-item list-group-item-success list-group-item-action" id="reject-new-sprouts">
-          Reject the new sprouts.
+        <button class="btn btn-light btn-lg px-5 text-success fw-semibold" id="set-audio-accessible">
+          Audio
         </button>
       </div>
     </div>
   </section>
 
-  <!-- First Scene journey ends here -->
+  <!-- First scene -->
+  <section id="first-scene" class="hero bg-success text-white py-5">
+    <div class="container text-center">
+      <p class="lead mb-4">
+        You sprout. Sprouted from the ground you are a sapling. A sapling you are not meant to be. You know, you are
+        meant to grow.
+      </p>
+      <p class="lead mb-4">
+        Sapling, you spy a new sprout, and another, and another, and soon a whole field of fresh sprouts you spy.
+        You deliberate how tall you could grow with other sprouts clambering for sunlight.
+      </p>
+      <h5 class="fw-bold mb-3">Sapling, do you:</h5>
+      <div class="d-flex flex-column align-items-center gap-3 my-4">
+        <button class="btn btn-light btn-lg px-5 text-success fw-semibold" id="accept-new-sprouts">
+          Accept the new sprouts
+        </button>
+        <button class="btn btn-light btn-lg px-5 text-success fw-semibold" id="reject-new-sprouts">
+          Reject the new sprouts
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- First scene ending -->
   <section id="first-scene-ending" class="hero bg-success text-white text-center py-5">
-    <p>
-      You grow in height to be the tallest tree in the world. Your growth journey ends here
-    </p>
+    <div class="container">
+      <p class="lead mb-4">
+        You grow in height to be the tallest tree in the world. Your growth journey ends here.
+      </p>
+    </div>
   </section>
 
-
-  <!-- Second scene  -->
-  <section id="second-scene" class="hero bg-success text-white text-center py-5">
-
-    <p>You have accepted the new sprouts, you do not grow to be the tallest tree. You have grown to become a forest.</p>
-
-    <p>Forest of trees, you gaze on your bounty of bark and leaves of green and notice a bug.
-      Two bugs.
-      Three bugs.
-      A whole army of bugs, grubs and wrigglers.
-    </p>
-
-    <p>You deliberate how beautiful green you could grow with an army of bugs swarming your bark and swindleing your leaves.
-    </p>
-
-    <div class="container">
-      <h5 class="fw-bold">Forest of trees, do you:
-      </h5>
-      <div class="list-group rounded" id="inputMode">
-        <button class="list-group-item list-group-item-success list-group-item-action" id="accept-new-bugs">
-          Accept the bugs, grubs and wrigglers.
+  <!-- Second scene -->
+  <section id="second-scene" class="hero bg-success text-white py-5">
+    <div class="container text-center">
+      <p class="lead mb-4">
+        You have accepted the new sprouts, you do not grow to be the tallest tree. You have grown to become a forest.
+      </p>
+      <p class="lead mb-4">
+        Forest of trees, you gaze on your bounty of bark and leaves of green and notice a bug. Two bugs. Three bugs. A
+        whole army of bugs, grubs and wrigglers.
+      </p>
+      <p class="lead mb-4">
+        You deliberate how beautiful green you could grow with an army of bugs swarming your bark and swindling your
+        leaves.
+      </p>
+      <h5 class="fw-bold mb-3">Forest of trees, do you:</h5>
+      <div class="d-flex flex-column align-items-center gap-3 my-4">
+        <button class="btn btn-light btn-lg px-5 text-success fw-semibold" id="accept-new-bugs">
+          Accept the bugs, grubs and wrigglers
         </button>
-        <button class="list-group-item list-group-item-success list-group-item-action" id="reject-new-bugs">
-          Reject the army of bugs, grubs and wrigglers.
-
+        <button class="btn btn-light btn-lg px-5 text-success fw-semibold" id="reject-new-bugs">
+          Reject the army of bugs, grubs and wrigglers
         </button>
       </div>
     </div>
-
   </section>
 
-  <!-- Ending second scene -->
+  <!-- Second scene ending -->
   <section id="second-scene-ending" class="hero bg-success text-white text-center py-5">
-    <p>
-      You grow in green to be the greenest forest in the world. Your growth journey ends here
-    </p>
+    <div class="container">
+      <p class="lead mb-4">
+        You grow in green to be the greenest forest in the world. Your growth journey ends here.
+      </p>
+    </div>
   </section>
 
   <!-- Third scene -->
-  <section id="third-scene" class="hero bg-success text-white text-center py-5">
-
-    <p>Forest of Trees and Wriggling feet, you feel the strength and splendor of your trunks and branches, until…
-
-    </p>
-
-    <p>Chop Chop.
-      Snap Snap,
-      Crunch Crunch,
-      Creak,
-      Crash.
-    </p>
-
-    <p>
-      You feel a section of your trunks tumble to the ground and spot the crafty culprits.
-      Beavers.
-    </p>
-
-    <p>
-      Your new sprouts grew your forest but shrunk your height and attracted bugs which grew your soil but shrunk your beautiful green, and attracted a frenzy of fauna shrinking your forest.
-    </p>
-
-    <p>
-      You deliberate how much more you will shrink if you accept these fauna.
-    </p>
-
-    <p>Or how much more will you grow.</p>
-
-    <div class="container">
-      <h5 class="fw-bold">Do you:
-      </h5>
-      <div class="list-group rounded" id="inputMode">
-        <button class="list-group-item list-group-item-success list-group-item-action" id="accept-fauna">
-          Accept the fauna.
+  <section id="third-scene" class="hero bg-success text-white py-5">
+    <div class="container text-center">
+      <p class="lead mb-4">
+        Forest of Trees and Wriggling feet, you feel the strength and splendor of your trunks and branches, until…
+      </p>
+      <p class="lead mb-4">
+        Chop Chop. Snap Snap, Crunch Crunch, Creak, Crash.
+      </p>
+      <p class="lead mb-4">
+        You feel a section of your trunks tumble to the ground and spot the crafty culprits. Beavers.
+      </p>
+      <p class="lead mb-4">
+        Your new sprouts grew your forest but shrunk your height and attracted bugs which grew your soil but shrunk your
+        beautiful green, and attracted a frenzy of fauna shrinking your forest.
+      </p>
+      <p class="lead mb-4">
+        You deliberate how much more you will shrink if you accept these fauna. Or how much more will you grow.
+      </p>
+      <h5 class="fw-bold mb-3">Do you:</h5>
+      <div class="d-flex flex-column align-items-center gap-3 my-4">
+        <button class="btn btn-light btn-lg px-5 text-success fw-semibold" id="accept-fauna">
+          Accept the fauna
         </button>
-        <button class="list-group-item list-group-item-success list-group-item-action" id="reject-fauna">
-          Reject the frenzied fauna.
+        <button class="btn btn-light btn-lg px-5 text-success fw-semibold" id="reject-fauna">
+          Reject the frenzied fauna
         </button>
       </div>
     </div>
-
   </section>
 
-  <!-- Ending third scene -->
+  <!-- Third scene ending -->
   <section id="third-scene-ending" class="hero bg-success text-white text-center py-5">
-    <p>
-      You do not shrink in size but remain as you are. Your growth journey ends here.
-    </p>
+    <div class="container">
+      <p class="lead mb-4">
+        You do not shrink in size but remain as you are. Your growth journey ends here.
+      </p>
+    </div>
   </section>
 
   <!-- Fourth scene -->
   <section id="fourth-scene" class="hero bg-success text-white text-center py-5">
-    <p>
-      You have accepted the fauna, and the bugs, grubs and wrigglers, and the new sprouts. You have grown to become a fire and drought resistant, soil-rich forest.
-    </p>
-
-    <p>
-      You have grown your compassion. Your forest of trees and wriggling feet and fauna has grown you to have the strongest and most beautiful heart. Your growth journey does not end here.
-    </p>
-
+    <div class="container">
+      <p class="lead mb-4">
+        You have accepted the fauna, and the bugs, grubs and wrigglers, and the new sprouts. You have grown to become a
+        fire and drought resistant, soil-rich forest.
+      </p>
+      <p class="lead mb-4">
+        You have grown your compassion. Your forest of trees and wriggling feet and fauna has grown you to have the
+        strongest and most beautiful heart. Your growth journey does not end here.
+      </p>
   </section>
-  
-  <div class="container text-center">
-      <button class="btn btn-light btn-lg" id="restart-button">
-      Start Again
-    </button>
-  </div>
+    
+     <div class="text-center my-4">
+        <button class="btn btn-light btn-lg px-5 text-success fw-semibold" id="restart-button">
+          Start Again
+        </button>
+      </div>
+    </div>
 
-  <!-- Footer  -->
-<footer class="bg-success-subtle border-top border-success border-opacity-25 mt-5">
-  <div class="container text-center py-4">
-    <p class="mb-1 text-success-emphasis small">
-      &copy Understory
-    </p>
-    <p class="mb-0 text-success-emphasis small">
-      Continue to Grow.
-    </p>
-  </div>
-</footer>
+  <!-- Footer -->
+  <footer class="bg-success-subtle border-top border-success border-opacity-25 mt-5">
+    <div class="container text-center py-4">
+      <p class="mb-1 text-success-emphasis small">&copy; Understory</p>
+      <p class="mb-0 text-success-emphasis small">Continue to Grow.</p>
+    </div>
+  </footer>
 
-
-  <!-- Bootstrap JS: Required for interactive components like the mobile menu -->
+  <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-
-  <!-- Custom JS: Your own interactive code goes here -->
   <script src="script.js"></script>
+
 </body>
 
 </html>
