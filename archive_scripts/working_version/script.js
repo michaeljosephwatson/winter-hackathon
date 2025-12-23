@@ -255,7 +255,7 @@ document.addEventListener("DOMContentLoaded", function () {
       console.log("Set motion accessibility");
       goToScene("first-scene");
 
-      ws = new WebSocket("ws://localhost:6789");
+      ws = new WebSocket(`ws://${window.location.hostname}:8765`);
       ws.onopen = () => console.log("Connected to head motion server");
       ws.onclose = () => console.log("Head motion server disconnected");
       ws.onerror = (err) => console.error("WebSocket error:", err);

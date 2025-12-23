@@ -39,9 +39,10 @@ async def head_server(websocket) -> None:
 
 
 async def main():
-    start_server = websockets.serve(head_server, "localhost", 6789)
+    start_server = websockets.serve(
+        head_server, "0.0.0.0", 8765)
     await start_server
-    print("WebSocket server started on ws://localhost:6789")
+    print("WebSocket server started on ws://0.0.0.0:8765")
     await asyncio.Future()
 
 if __name__ == "__main__":

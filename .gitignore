@@ -24,3 +24,9 @@ Thumbs.db
 *.swo
 
 *.tfvars
+
+.terraform
+.terraform.lock.hcl
+terraform.tfstate.backup
+terraform.tfstate
+key.pem
