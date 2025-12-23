@@ -3,6 +3,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
   let currentScene = "home";
   let motionProcessing = false;
+  let audioEnabled = false;
+  let audioRestartTimes = null;
   let ws = null;
   let recognition = null;
 
@@ -278,11 +280,27 @@ document.addEventListener("DOMContentLoaded", function () {
         alert("Speech recognition not supported in this browser.");
         return;
       }
+      
+      if (recognition) {
+        console.log("Speech recognition already initialised");
+        audioEnabled = true;
+        try {
+          recognition.start()
+        } catch(_) {}
+        goToScene("first-scene")
+        return;
+      }
 
       recognition = new SpeechRecognition();
       recognition.lang = "en-UK";
       recognition.interimResults = false;
       recognition.maxAlternatives = 1;
+
+      audioEnabled = true;
+
+      recognition.onstart = () => {
+        console.log("Speech recognition started")
+      }
 
       recognition.onresult = (event) => {
         const transcript = event.results[0][0].transcript.toLowerCase().trim();
@@ -303,11 +321,30 @@ document.addEventListener("DOMContentLoaded", function () {
         }
       };
 
-      recognition.onerror = (event) =>
+      recognition.onerror = (event) => {
         console.error("Speech error:", event.error);
+
+        if (event.error === "not-allowed" || event.error === "service-not-allowed") {
+          audioEnabled = false;
+          try {
+            recognition.stop();
+          } catch (_) {}
+          recognition = null;
+          alert("Microphone permission was blocked. Please allow it an try again.");
+        }
+      };
 
       recognition.onend = () => {
         if (recognition) recognition.start();
+
+        clearTimeout(audioRestartTimer);
+        audioRestartTimer = setTimeout(() => {
+        if (audioEnabled || !recognition) return;
+        try {
+          recognition.start()
+        } catch (_) {          
+        }
+        }, 400);
       };
 
       recognition.start();
