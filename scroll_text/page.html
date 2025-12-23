@@ -1,0 +1,59 @@
+ <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+ />
+
+
+<div id="mainPage">
+  <main class="py-5">
+    <div class="container text-center mb-4">
+      <p id="gameStateText">
+      </p>
+      <h4 class="hide" id="gameStateTitle">
+        What do you do?
+      </h4>
+    </div>
+
+    <div id="buttonDiv" class="container hide">
+      <!-- row creates a horizontal layout -->
+      <div class="row g-4 justify-content-center">
+        
+        <!-- Column 1 -->
+        <div class="col-md-4 col-lg-5">
+          <button
+            id="buttonOne"
+            class="card w-100"
+            onclick="optionOne()"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarNav"
+          >
+            <div class="card-body">
+              <h5 id=buttonOneText class="card-title">Be kind</h5>
+              <p id='buttonTwoText' class="card-text">Do something kind...</p>
+            </div>
+          </button>
+        </div>
+
+        <!-- Column 2 -->
+        <div class="col-md-4 col-lg-5">
+          <button
+            id="buttonTwo"
+            class="card w-100"
+            onclick="optionTwo()"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarNav"
+          >
+            <div class="card-body">
+              <h5 class="card-title">Be Neutral</h5>
+              <p class="card-text">Do something neutral...</p>
+            </div>
+          </button>
+        </div>
+
+        
+      </div>
+    </div>
+
+  </main>
+</div>
