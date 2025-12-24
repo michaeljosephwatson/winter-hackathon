@@ -1,27 +1,30 @@
 document.addEventListener("DOMContentLoaded", function () {
-  console.log("Page loaded!");
-
   let currentScene = "home";
   let motionProcessing = false;
-  let ws = null;
   let recognition = null;
 
+  let typewriterGeneration = 0;
+
   function typeWriter(element, speed = 40) {
-    const fullText = element.textContent;
+    const text = element.dataset.fullText || element.textContent;
+    element.dataset.fullText = text;
     element.textContent = "";
+    const gen = ++typewriterGeneration;
     let i = 0;
 
-    function type() {
-      if (i < fullText.length) {
-        element.textContent += fullText[i];
-        i++;
-        setTimeout(type, speed);
+    function tick() {
+      if (gen !== typewriterGeneration) return;
+      if (i < text.length) {
+        element.textContent += text[i++];
+        setTimeout(tick, speed);
       }
     }
-    type();
+    tick();
   }
 
   function goToScene(sceneId) {
+    typewriterGeneration++;
+
     const scenes = [
       "home-page",
       "accessibility-page",
@@ -46,38 +49,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
     currentScene = sceneId;
 
-    const activeScene = document.getElementById(sceneId);
-    if (!activeScene) return;
+    const active = document.getElementById(sceneId);
+    if (!active) return;
 
-    const storyBits = activeScene.querySelectorAll(".gameStateText");
-    storyBits.forEach((el) => typeWriter(el));
-  }
-
-  function handleMotionSelection(selection) {
-    if (motionProcessing) return;
-    motionProcessing = true;
-
-    setTimeout(() => {
-      switch (currentScene) {
-        case "first-scene":
-          selection === "LEFT"
-            ? goToScene("second-scene")
-            : goToScene("first-scene-ending");
-          break;
-        case "second-scene":
-          selection === "LEFT"
-            ? goToScene("third-scene")
-            : goToScene("second-scene-ending");
-          break;
-        case "third-scene":
-          selection === "LEFT"
-            ? goToScene("fourth-scene")
-            : goToScene("third-scene-ending");
-          break;
-      }
-
-      setTimeout(() => (motionProcessing = false), 3000);
-    }, 2000);
+    active
+      .querySelectorAll(".gameStateText")
+      .forEach((el) => typeWriter(el, 40));
   }
 
   function handleChoice(choice) {
@@ -107,74 +84,126 @@ document.addEventListener("DOMContentLoaded", function () {
     }, 500);
   }
 
+  let cameraStream = null;
+  let lastDirection = "CENTER";
+  let dwellStart = null;
+  let inputLocked = false;
+
+  const DWELL_TIME = 2000;
+  const COOLDOWN_TIME = 5000;
+
+  function getHeadDirection(landmarks) {
+    const nose = landmarks[1];
+    const left = landmarks[234];
+    const right = landmarks[454];
+    const center = (left.x + right.x) / 2;
+    const offset = nose.x - center;
+    if (offset > 0.03) return "RIGHT";
+    if (offset < -0.03) return "LEFT";
+    return "CENTER";
+  }
+
+  function startMotion() {
+    const video = document.getElementById("camera");
+
+    const faceMesh = new FaceMesh({
+      locateFile: (f) =>
+        `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${f}`
+    });
+
+    faceMesh.setOptions({
+      maxNumFaces: 1,
+      refineLandmarks: true,
+      minDetectionConfidence: 0.6,
+      minTrackingConfidence: 0.6
+    });
+
+    faceMesh.onResults((results) => {
+      if (inputLocked || !results.multiFaceLandmarks?.length) return;
+
+      const dir = getHeadDirection(results.multiFaceLandmarks[0]);
+      const now = performance.now();
+
+      if (dir === "CENTER") {
+        lastDirection = "CENTER";
+        dwellStart = null;
+        return;
+      }
+
+      if (dir !== lastDirection) {
+        lastDirection = dir;
+        dwellStart = now;
+        return;
+      }
+
+      if (dwellStart && now - dwellStart >= DWELL_TIME) {
+        inputLocked = true;
+        handleChoice(dir === "LEFT" ? "ACCEPT" : "REJECT");
+        lastDirection = "CENTER";
+        dwellStart = null;
+        setTimeout(() => (inputLocked = false), COOLDOWN_TIME);
+      }
+    });
+
+    navigator.mediaDevices.getUserMedia({ video: true }).then((stream) => {
+      cameraStream = stream;
+      video.srcObject = stream;
+
+      const camera = new Camera(video, {
+        onFrame: async () => {
+          await faceMesh.send({ image: video });
+        },
+        width: 640,
+        height: 480
+      });
+
+      camera.start();
+    });
+  }
+
+  function stopMotion() {
+    if (cameraStream) {
+      cameraStream.getTracks().forEach((t) => t.stop());
+      cameraStream = null;
+    }
+    inputLocked = false;
+    lastDirection = "CENTER";
+    dwellStart = null;
+  }
+
   document.getElementById("start-button")?.addEventListener("click", () => {
-    console.log("Journey began");
     goToScene("accessibility-page");
   });
 
   document
     .getElementById("set-keyboard-accessible")
     ?.addEventListener("click", () => {
-      console.log("Set keyboard accessibility");
       goToScene("first-scene");
     });
 
   document
     .getElementById("set-motion-accessible")
     ?.addEventListener("click", () => {
-      console.log("Set motion accessibility");
       goToScene("first-scene");
-
-      ws = new WebSocket(`ws://${window.location.hostname}:8765`);
-      ws.onopen = () => console.log("Connected to head motion server");
-      ws.onclose = () => console.log("Head motion server disconnected");
-      ws.onerror = (err) => console.error("WebSocket error:", err);
-
-      ws.onmessage = (event) => {
-        const data = JSON.parse(event.data);
-        handleMotionSelection(data.selection);
-      };
+      startMotion();
     });
 
   document
     .getElementById("set-audio-accessible")
     ?.addEventListener("click", () => {
-      console.log("Set audio accessibility");
+      const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SR) return;
 
-      const SpeechRecognition =
-        window.SpeechRecognition || window.webkitSpeechRecognition;
-
-      if (!SpeechRecognition) {
-        alert("Speech recognition not supported in this browser.");
-        return;
-      }
-
-      recognition = new SpeechRecognition();
+      recognition = new SR();
       recognition.lang = "en-UK";
+      recognition.continuous = false;
       recognition.interimResults = false;
-      recognition.maxAlternatives = 1;
 
       recognition.onresult = (event) => {
-        const transcript = event.results[0][0].transcript.toLowerCase().trim();
-
-        console.log("Heard:", transcript);
-
-        if (transcript.includes("accept") || transcript.includes("except")) {
-          handleChoice("ACCEPT");
-        } else if (transcript.includes("reject")) {
-          handleChoice("REJECT");
-        } else if (transcript.includes("start")) {
-          goToScene("first-scene");
-        } else if (
-          transcript.includes("restart") ||
-          transcript.includes("go back")
-        ) {
-          goToScene("home-page");
-        }
+        const t = event.results[0][0].transcript.toLowerCase();
+        if (t.includes("accept")) handleChoice("ACCEPT");
+        if (t.includes("reject")) handleChoice("REJECT");
       };
-
-      recognition.onerror = (event) =>
-        console.error("Speech error:", event.error);
 
       recognition.onend = () => {
         if (recognition) recognition.start();
@@ -204,17 +233,9 @@ document.addEventListener("DOMContentLoaded", function () {
     ?.addEventListener("click", () => handleChoice("REJECT"));
 
   document.getElementById("restart-button")?.addEventListener("click", () => {
-    if (ws && ws.readyState === WebSocket.OPEN) {
-      ws.close();
-      ws = null;
-    }
-
-    if (recognition) {
-      recognition.stop();
-      recognition = null;
-      console.log("Speech recognition stopped");
-    }
-
+    stopMotion();
+    if (recognition) recognition.stop();
+    recognition = null;
     goToScene("home-page");
   });
 
